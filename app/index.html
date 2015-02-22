@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GitHub Starred Items</title>
+    <script src="assets/webcomponentsjs/webcomponents.min.js"></script>
+
+    <link rel="import" href="assets/font-roboto/roboto.html" />
+
+    <link href="assets/core-header-panel/core-header-panel.html" rel="import" />
+
+    <link href="assets/core-toolbar/core-toolbar.html" rel="import" />
+
+    <link href="assets/paper-input/paper-input.html" rel="import" />
+
+    <link href="elements/github-search.html" rel="import" />
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'RobotoDraft', sans-serif;
+        }
+
+        core-header-panel {
+            height: 100%;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        core-toolbar {
+            color: #fff;
+        }
+
+        .container {
+            width: 80%;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <core-header-panel>
+        <core-toolbar style="background-color: #4285f4;">
+            <span flex>GitHub Starred Items</span>
+        </core-toolbar>
+        <div class="container" layout vertical center>
+            <github-search></github-search>
+        </div>
+    </core-header-panel>
+
+</body>
+</html>

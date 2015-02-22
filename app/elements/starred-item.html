@@ -1,0 +1,44 @@
+<link rel="import" href="../assets/polymer/polymer.html">
+<script src="../assets/jquery/dist/jquery.js"></script>
+<script src="../assets/lodash/lodash.js"></script>
+<script src="../assets/moment/moment.js"></script>
+
+<polymer-element name="starred-item" attributes="data">
+    <template>
+        <style>
+            #item-wrapper {
+                border-top: 1px solid #ddd;
+                padding: .5em 0;
+            }
+            .small {
+                font-size: 10px;
+            }
+        </style>
+        <div id="item-wrapper">
+            <p class="small">{{item.starredDate}}</p>
+            <p>
+                <a href="{{item.url}}">
+                    {{item.name}}
+                </a>
+            </p>
+            <p>{{item.description}}</p>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            data: {},
+            item: {},
+            ready: function () {
+                this.item = new StarredRepo(this.data);
+            }
+        });
+
+        function StarredRepo(data) {
+            this.starredDate = moment(data.starred_at).format('YYYY-MM-DD');
+            this.name = data.repo.full_name;
+            this.description = data.repo.description;
+            this.url = data.repo.html_url;
+        }
+
+    </script>
+</polymer-element>

@@ -1,0 +1,66 @@
+<link rel="import" href="../assets/polymer/polymer.html">
+<link rel="import" href="../assets/paper-input/paper-input.html" />
+<link rel="import" href="../assets/paper-button/paper-button.html" />
+<link rel="import" href="../assets/paper-fab/paper-fab.html" />
+<link rel="import" href="../assets/paper-toast/paper-toast.html" />
+<link rel="import" href="starred-item.html">
+<script src="../assets/jquery/dist/jquery.js"></script>
+<script src="../assets/lodash/lodash.js"></script>
+
+<polymer-element name="github-search">
+    <template>
+        <style>
+            #search-wrapper {
+                margin-bottom: 1em;
+            }
+        </style>
+
+        <div id="search-wrapper">
+            <paper-input label="Enter a GitHub username" value="{{query}}"></paper-input>
+
+            <paper-fab icon="search" on-click="{{searchGitHubStarredItems}}"></paper-fab>
+        </div>
+
+        <template repeat="{{repo in starredRepos}}">
+            <starred-item data="{{repo}}"></starred-item>
+        </template>
+
+        <paper-toast id="toast" text="{{toastMessage}}"></paper-toast>
+
+    </template>
+    <script>
+        var timeoutId;
+        Polymer({
+            toastMessage: '',
+            query: '',
+            starredRepos: [],
+            ready: function () {
+            },
+            searchGitHubStarredItems: function () {
+                var trimmedQuery = this.query.trim();
+                if (trimmedQuery.length < 3) {
+                    this.showToast('Username must contain at least 3 letters');
+                    return;
+                }
+                var url = 'https://api.github.com/users/' + trimmedQuery + '/starred?page=1&per_page=100';
+                this.showToast('Loading starred repos');
+                return $.ajax(url, {
+                    headers: {
+                        Accept: 'application/vnd.github.v3.star+json'
+                    }
+                })
+                .done(function (res) {
+                    this.showToast('Successfully loaded ' + res.length + ' repos');
+                    this.starredRepos = res;
+                }.bind(this))
+                .fail(function () {
+                    this.showToast('Failed to load repos');
+                }.bind(this));
+            },
+            showToast: function (msg) {
+                this.toastMessage = msg;
+                this.$.toast.show();
+            }
+        });
+    </script>
+</polymer-element>
